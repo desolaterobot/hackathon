@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_gemini/google_gemini.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 
 Color mainColor = const Color.fromARGB(255, 248, 86, 86);
 Color darkerMainColor = Color.fromARGB(255, 255, 71, 71);
@@ -108,12 +109,11 @@ class _CountryApp extends State<CountryApp> {
       return Padding(
         padding: const EdgeInsets.all(40.0),
         child: Center(
-          child: Flexible(
-              child: Text(
+            child: Text(
             help,
             style: TextStyle(color: darkerMainColor, fontSize: 21),
             textAlign: TextAlign.center,
-          )),
+          ),
         ),
       );
     }
@@ -121,11 +121,15 @@ class _CountryApp extends State<CountryApp> {
 
   //opens file explorer or camera to select image.
   Future pickImageFrom(bool fromGallery) async {
-    final returnedImage = await ImagePicker().pickImage(
-        source: fromGallery ? ImageSource.gallery : ImageSource.camera);
+    String? returnedImage = Platform.isWindows
+        ? (await FilePicker.platform.pickFiles(
+            type: FileType.image,
+          ))?.files.single.path
+        : (await ImagePicker().pickImage(
+            source: fromGallery ? ImageSource.gallery : ImageSource.camera))?.path;
     if (returnedImage == null) return;
     setState(() {
-      selectedImage = File(returnedImage.path);
+      selectedImage = File(returnedImage);
     });
   }
 
