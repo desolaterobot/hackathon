@@ -12,7 +12,7 @@ Color lighterSecondaryColor = const Color.fromARGB(255, 255, 177, 235);
 const String help = '''
   Welcome to WhereDat, a handy travel companion to display vital country information from a single photo.
 
-  Start by uploading a photo or taking one yourself, then tapping on GENERATE!
+  Start by uploading a photo, then tapping on GENERATE!
 ''';
 
 String geminiReply = "???";
@@ -22,8 +22,8 @@ final gemini = GoogleGemini(
 );
 
 void main() => runApp(const MaterialApp(
-  home: CountryApp(),
-));
+      home: CountryApp(),
+    ));
 
 class CountryApp extends StatefulWidget {
   const CountryApp({super.key});
@@ -53,33 +53,13 @@ class _CountryApp extends State<CountryApp> {
         ),
       ),
       body: showImage(), //automatically shows
-      bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: Colors.white,
-          backgroundColor: mainColor,
-          unselectedItemColor: Colors.white,
-          items: const [
-            //!THE THREE NAVIGATION BUTTONS BELOW
-            BottomNavigationBarItem(
-                icon: Icon(Icons.camera_alt_rounded),
-                label: 'Take Photo',
-                backgroundColor: Colors.white),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.drive_folder_upload_rounded),
-                label: 'Upload Image',
-                backgroundColor: Colors.white),
-          ],
-          currentIndex: indexOfNavBar,
-          onTap: (index) {
-            indexOfNavBar = index;
-            setState(() {
-              switch (index) {
-                case 0:
-                  pickImageFrom(false);
-                case 1:
-                  pickImageFrom(true);
-              }
-            });
-          }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => setState(() {
+          pickImageFrom(true);
+        }),
+        backgroundColor: mainColor,
+        child: const Icon(Icons.upload_rounded, color: Colors.white),
+      ),
     );
   }
 
@@ -107,8 +87,8 @@ class _CountryApp extends State<CountryApp> {
                 !isloading
                     ? ElevatedButton(
                         onPressed: () => getLocation(image: selectedNotNull),
-                        style:
-                            ElevatedButton.styleFrom(backgroundColor: mainColor),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: mainColor),
                         child: const Padding(
                           padding: EdgeInsets.all(15.0),
                           child: Text(
@@ -147,11 +127,6 @@ class _CountryApp extends State<CountryApp> {
     setState(() {
       selectedImage = File(returnedImage.path);
     });
-    sc.animateTo(
-      sc.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
   }
 
   //from the image given, produce location name as a string. from this,
@@ -163,7 +138,10 @@ class _CountryApp extends State<CountryApp> {
     String query = oneShotPrompt;
     gemini.generateFromTextAndImages(query: query, image: image).then((value) {
       if (value.text == "NO") {
-        showErrorSnackbar(context, "Unable to guess where this is. Try another picture.", pickImageFrom);
+        showErrorSnackbar(
+            context,
+            "Unable to guess where this is. Try another picture.",
+            pickImageFrom);
         setState(() {
           isloading = false;
         });
@@ -176,7 +154,9 @@ class _CountryApp extends State<CountryApp> {
       dataString = replyList;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GeneratePage()), //directs the user to the information page
+        MaterialPageRoute(
+            builder: (context) =>
+                GeneratePage()), //directs the user to the information page
       );
       setState(() {
         isloading = false;
@@ -206,7 +186,8 @@ void showSnackbar(
 }
 
 //shows a message at the bottom of the screen, along with an option to retry uploading a picture
-void showErrorSnackbar(BuildContext context, String message, Function retryFunction) {
+void showErrorSnackbar(
+    BuildContext context, String message, Function retryFunction) {
   final snackBar = SnackBar(
     content: Text(message),
     action: SnackBarAction(
@@ -259,10 +240,10 @@ class _GeneratePageState extends State<GeneratePage> {
     createItinerary();
   }
 
-  void refreshItinerary(){
+  void refreshItinerary() {
     itinerary = "";
     showSnackbar(context, "Refreshing itinerary");
-    setState((){});
+    setState(() {});
     createItinerary();
   }
 
@@ -270,7 +251,8 @@ class _GeneratePageState extends State<GeneratePage> {
     setState(() {
       itineraryLoading = true;
     });
-    String query = "Create a $itineraryDays-day itinerary for $countrytitle, as detailed as possble. DO NOT give me in Markdown, but rather use a hyphen for each activity.";
+    String query =
+        "Create a $itineraryDays-day itinerary for $countrytitle, as detailed as possble. DO NOT give me in Markdown, but rather use a hyphen for each activity.";
     gemini.generateFromText(query).then((value) {
       itinerary = value.text;
       setState(() {
@@ -286,49 +268,50 @@ class _GeneratePageState extends State<GeneratePage> {
     });
   }
 
-  Widget fetchItineraryWidget(){
-    return itinerary != "" ? Container(
-      padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        children: [
-          const Divider(
-            color: Color.fromARGB(255, 255, 157, 157),
-            thickness: 2.5,
-            indent: 30.0,
-            endIndent: 30.0,
-          ),
-          ListTile(
-            title: Text(
-              "$itineraryDays-day Itinerary",
-              style: TextStyle(
-                  color: darkerMainColor, fontSize: 30.0),
+  Widget fetchItineraryWidget() {
+    return itinerary != ""
+        ? Container(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: [
+                const Divider(
+                  color: Color.fromARGB(255, 255, 157, 157),
+                  thickness: 2.5,
+                  indent: 30.0,
+                  endIndent: 30.0,
+                ),
+                ListTile(
+                  title: Text(
+                    "$itineraryDays-day Itinerary",
+                    style: TextStyle(color: darkerMainColor, fontSize: 30.0),
+                  ),
+                  subtitle: Text(
+                    itinerary,
+                    style: TextStyle(
+                      color: darkerMainColor,
+                      fontSize: 19.0,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            subtitle: Text(
-              itinerary,
-              style: TextStyle(
-                color: darkerMainColor, fontSize: 19.0,
+          )
+        : Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Text("Generating itinerary",
+                      style: TextStyle(fontSize: 20, color: mainColor)),
+                  const SizedBox(height: 10),
+                  CircularProgressIndicator(
+                    color: mainColor,
+                  ),
+                  const SizedBox(height: 10),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
-    ) 
-    :
-    Center(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Text("Generating itinerary", style: TextStyle(fontSize: 20, color: mainColor)),
-            const SizedBox(height: 10),
-            CircularProgressIndicator(
-              color: mainColor,
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   @override
@@ -404,7 +387,7 @@ class _GeneratePageState extends State<GeneratePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           refreshItinerary();
         },
         backgroundColor: secondaryColor,
@@ -413,4 +396,3 @@ class _GeneratePageState extends State<GeneratePage> {
     );
   }
 }
-
