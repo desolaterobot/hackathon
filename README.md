@@ -1,9 +1,14 @@
 ## WhereDat - TechFest Hackathon Team 56
 
+![Banner](assets/banner.png)
+
 ## What is WhereDat?
 Using Gemini AI Photo recognition software, WhereDat is an android/windows app that uses your photo that you uploaded and detects where the location you are looking for based on the picture itself.
 With the location detected by the AI, WhereDat will display neccessary information regarding its location. For example, information such as, its general information, their native and official languages, journey trip and time to the location, currency exchange rates, the location’s current weather and its local delicacies.
 Once information of the location is found, WhereDat plans a 7-day itinerary for you. The 7-day itinerary will provide you to explore the location and it’s local attractions, exposing you to experience different culture.
+
+## Usage video
+[![Click to play video](https://img.youtube.com/vi/I_v0kdimHPA/0.jpg)](https://youtu.be/I_v0kdimHPA)
 
 ## Installation Instructions
 
@@ -13,7 +18,7 @@ Once information of the location is found, WhereDat plans a 7-day itinerary for 
 3. Click on either `whereDat.exe` or the shortcut you created to run the app.
 
 ### ANDROID
-1. Go [here]("https://drive.google.com/drive/folders/13nKUWBT8_UBHZdFA5oRz_5LOfeysSV_M?usp=sharing"), then download `WhereDat.apk`.
+1. Go [here](https://drive.google.com/drive/folders/13nKUWBT8_UBHZdFA5oRz_5LOfeysSV_M?usp=sharing), then download `WhereDat.apk`.
 2. Move `WhereDat.apk` to the any folder on your android phone.
 3. Use your android phone to navigate into the aforementioned folder.
 4. Tap on it and then tap `install`.
