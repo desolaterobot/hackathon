@@ -19,7 +19,7 @@ const String help = '''
 String geminiReply = "???";
 
 final gemini = GoogleGemini(
-  apiKey: "AIzaSyDx5ldNtJIWhSaGXAAgRPtVy66UYcOWN6M",
+  apiKey: "--YOUR API KEY HERE--",
 );
 
 void main() => runApp(const MaterialApp(
